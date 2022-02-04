@@ -11,7 +11,7 @@ Every step of your algorithm must yield with the current state of the array to v
 
 ## Example
 Bubble Sort
-```
+```py
 def sort(arr):
     n=len(arr)
     fine = False
