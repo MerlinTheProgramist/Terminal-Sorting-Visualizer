@@ -6,7 +6,7 @@ in linux terminal
 
 ## Test your favorite Sorting Algorithms!
 Create new python script inside `/Algorimhms` folder.  
-Name your main function `sort`, the visualizer will call that.  
+Name your main function `def sort()`, the visualizer will call that.  
 Every step of your algorithm must yeald with the current state of the array to visualize it in the terminal.
 
 ## [optional] `--help`
