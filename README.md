@@ -2,7 +2,7 @@
 A python script for visualizing sorting algoritms in terminal.  
 It uses curses, that is build in to python3, so you dont need to install anything.
 
-<video src='https://i.imgur.com/OiKPuDZ.mp4' width=180/>
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/EdbTJCF" data-context="false" ><a href="//imgur.com/a/EdbTJCF"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 ## Run defaults by 
 >python3 ./graph_drawer.py
