@@ -27,6 +27,6 @@ def sort(arr):
             yield arr
 ```
 ## [optional] `--help`
-`-a 1 3 4` choice which algorithms to compare
+`-a 1 3 4` choice which algorithms to compare  
 `-t` specify frametime of Visualizer in seconds
 
