@@ -4,15 +4,12 @@ import time
 import asyncio
 import argparse
 
-
-
 from sorting_algorythms import *
 
 TIME_STEP = 0
+ARR_LENGTH = 50
 
 sc,gh,gw = 0,0,0
-
-amount_to_sort = 10
 
 
 green,yellow,red,cyan = 0,0,0,0
@@ -46,8 +43,6 @@ class GraphWindow():
                 await self.drawStep(val, i, 3)
             else:
                 await self.drawStep(val, i,1)
-        
-        shift =min(correct,self.max_col*2+2-gw)
 
         self.win.refresh(0,0, 5,0, gh-1,gw-1)
         self.last_arr = arr
@@ -57,7 +52,7 @@ class GraphWindow():
 
     #draws one column of the graph    
     async def drawStep(self,h,index, colour):
-        height = min(max( self.mh - int(h/self.max_col*self.mh), 2),self.mh - 2)
+        height = min(max( self.mh - int(h/self.max_col*self.mh), 2),self.mh - 1)
         # draw columns
         try:
             for y in range(height,self.mh): #self.mh - self.col_h_mult * h,self.mh):
@@ -115,8 +110,8 @@ def show_results_msgbox(**info):
 #         self.totalTime = 0 
 #         self.name
 
-def test_sorting(algorithm,n, name = "Yasa"):
-    graph = GraphWindow(n, name)
+def test_sorting(algorithm,n, name = "Yet another Sorting Algorithm"):
+    graph = GraphWindow(n, name) #reset graph window
     
     totalTime = 0
 
@@ -125,10 +120,8 @@ def test_sorting(algorithm,n, name = "Yasa"):
     random.shuffle(arr)
     sorter = algorithm(arr)
     
-    steps_len=0
     s_time = time.time()
-    for step in sorter:
-        steps_len+=1
+    for step in sorter: 
 
         timePassed = time.time()-s_time
         asyncio.run(graph.update_graph(step, orginal_arr, timePassed))
@@ -139,10 +132,10 @@ def test_sorting(algorithm,n, name = "Yasa"):
         s_time=time.time()
 
     show_results_msgbox(total_time=totalTime)
-    return [name, steps_len, totalTime]
+    return [name, graph.info.step_count, totalTime]
 
 def wrap(scc):
-        global sc,gh,gw, TIME_STEP
+        global sc,gh,gw, TIME_STEP, ARR_LENGTH
         sc = curses.initscr()
         gh, gw = sc.getmaxyx()
 
@@ -161,13 +154,11 @@ def wrap(scc):
         scc.keypad(True)
         curses.curs_set(False)
         scc.timeout(20)
-
-        n = 40
         
         results = [] # NAME, STEPS, TIME
 
         for alg in SelectedAlgorithms:
-            results.append(test_sorting(alg[1], n, alg[0]))
+            results.append(test_sorting(alg[1], ARR_LENGTH, alg[0]))
 
 SelectedAlgorithms = []
 
@@ -180,16 +171,18 @@ if __name__=="__main__":
     helpList = str('\n'.join([f"{i}. {a.strip('.py')}" for a,i in zip(foundFiles,range(1,1+len(foundFiles)))]))
     parser = argparse.ArgumentParser(description='Compare Sorting Algorithms')
     parser.add_argument('-a','--algorithms',type=int, nargs='*', required=False, choices=range(1,len(foundFiles)+1), 
-    help=f"Algorithms you want to test and compare: {helpList}", 
-    default=[i for i in range(1,1+len(foundFiles))])
+        help=f"Algorithms you want to test and compare: {helpList}", 
+        default=[i for i in range(1,1+len(foundFiles))])
     parser.add_argument('-dt','--delaytime',type=float,required=False,
-    help='delay time of the visualization steps, has no influence on testing times',
-    default=0.08)
+        help='delay time of the visualization steps, has no influence on testing times',
+        default=0.08)
+    parser.add_argument('-l','--length',type=int,required=False,help="Length of the shuffled array that will be passes to all algorithms, default=50",default=50)
 
 
     args = parser.parse_args()
 
     TIME_STEP = args.delaytime
+    ARR_LENGTH = args.length
     
     for aid in args.algorithms:
         mod = foundFiles[aid-1].strip('.py')
