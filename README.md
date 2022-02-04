@@ -8,7 +8,7 @@ It uses curses, that is build in to python3, so you dont need to install anythin
 
 ## Test your favorite Sorting Algorithms!
 Create new python script inside `/Algorithms` folder.  
-Name your main function `sort`, the visualizer will call that and it will parse the shuffled array.  
+Name your main function `sort`, the visualizer will call that and it will parse the shuffled array as an argument.  
 Every step of your algorithm must [`yield`](https://www.geeksforgeeks.org/use-yield-keyword-instead-return-keyword-python/) with the current state of the array to visualize it in the terminal.  
 
 ## Example
