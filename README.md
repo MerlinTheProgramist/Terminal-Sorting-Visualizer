@@ -1,6 +1,7 @@
 # Sorting-Algorithms-Visualizer
+A python script for visualizing sorting algoritms in terminal.  
+It uses curses, that is build in to python3, so you dont need to install anything.
 
-in linux terminal
 ## Run defaults by 
 >python3 ./graph_drawer.py
 
