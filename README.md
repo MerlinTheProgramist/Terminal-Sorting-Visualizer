@@ -1,4 +1,4 @@
-# Sorting-Algorithms-Visualizer
+# Terminal Sorting Visualizer
 A python script for visualizing sorting algoritms in terminal.  
 It uses curses, that is build in to python3, so you dont need to install anything.
 
