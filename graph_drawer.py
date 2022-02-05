@@ -4,10 +4,13 @@ import time
 import asyncio
 import argparse
 
-from sorting_algorythms import *
+import os
+import importlib
 
 TIME_STEP = 0
 ARR_LENGTH = 50
+
+IS_CONTROL = False
 
 sc,gh,gw = 0,0,0
 
@@ -63,6 +66,8 @@ class GraphWindow():
         try:
             self.win.addstr(height-1,  index*(self.col_w+1)+1+centr,  str(h),curses.color_pair(2))
         except:pass
+
+
 class InfoWindow():
     def __init__(self, name):
         global gh,gw
@@ -95,22 +100,13 @@ def show_results_msgbox(**info):
     win.addstr(i,1, "press Enter to continue")
     win.refresh()
     
-    # curses.napms(2000)
     while sc.getch() != 10: #IF ENTER
         pass
-        
 
-
-
-# class Test ():
-#     def __init__(self,algorithm, array):
-#         self.algorithm = algorithm
-#         self.arr = array
-#         self.n = len(array)
-#         self.totalTime = 0 
-#         self.name
 
 def test_sorting(algorithm,n, name = "Yet another Sorting Algorithm"):
+    global IS_CONTROL
+
     graph = GraphWindow(n, name) #reset graph window
     
     totalTime = 0
@@ -118,21 +114,56 @@ def test_sorting(algorithm,n, name = "Yet another Sorting Algorithm"):
     arr = [i for i in range(1,n+1)]
     orginal_arr = arr.copy()
     random.shuffle(arr)
-    sorter = algorithm(arr)
-    
+    sorter_generator = algorithm(arr)
+
+    def sorter_process_instecting():
+        curr_step = 0
+
+        # Handle arrow movment in time
+        
+        event = sc.getch()
+        while event!= curses.KEY_ENTER:
+            event = sc.getch()
+                # Left / Right
+            if event == curses.KEY_LEFT:
+                curr_step = min(len(steps_list)-1,max(0,curr_step-1))
+                display_frame()
+            elif event == curses.KEY_RIGHT:
+                curr_step = min(len(steps_list)-1,max(0,curr_step+1))
+                display_frame()
+
+            def display_frame():   
+                graph.info.step_count = curr_step
+                asyncio.run( 
+                    graph.update_graph(steps_list[curr_step][0],
+                        orginal_arr, steps_list[curr_step][1])
+                )
+
+    steps_list = []        
+
     s_time = time.time()
-    for step in sorter: 
+    for step in sorter_generator:
 
         timePassed = time.time()-s_time
-        asyncio.run(graph.update_graph(step, orginal_arr, timePassed))
         totalTime+=timePassed
 
+        asyncio.run( graph.update_graph(step, orginal_arr, timePassed))
+
         curses.napms(int(TIME_STEP*1000))
+        steps_list.append([step.copy(), timePassed])
 
         s_time=time.time()
-
+        
     show_results_msgbox(total_time=totalTime)
+
+    if IS_CONTROL:
+        sorter_process_instecting()
+
     return [name, graph.info.step_count, totalTime]
+
+    
+
+
 
 def wrap(scc):
         global sc,gh,gw, TIME_STEP, ARR_LENGTH
@@ -178,11 +209,13 @@ if __name__=="__main__":
         default=0.08)
     parser.add_argument('-l','--length',type=int,required=False,help="Length of the shuffled array that will be passes to all algorithms, default=50",default=50)
 
+    parser.add_argument('-c','--control', action='store_true', default=False, required=False)
 
     args = parser.parse_args()
 
     TIME_STEP = args.delaytime
     ARR_LENGTH = args.length
+    IS_CONTROL = args.control
     
     for aid in args.algorithms:
         mod = foundFiles[aid-1].strip('.py')
