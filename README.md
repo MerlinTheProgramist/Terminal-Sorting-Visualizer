@@ -14,9 +14,9 @@ Every step of your algorithm must [`yield`]([https://www.geeksforgeeks.org/use-y
 ## Example
 Bubble Sort
 ```py
-def sort(arr):
-    n=len(arr)
-    fine = False
+def sort(arr:List[int]) -> Generator[List[int]]:
+    n:int=len(arr)
+    fine:bool = False
     while not fine:
         fine = True
         for i in range(n-1): 
