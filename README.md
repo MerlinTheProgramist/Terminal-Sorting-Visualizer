@@ -15,8 +15,8 @@ Every step of your algorithm must [`yield`]([https://www.geeksforgeeks.org/use-y
 Bubble Sort
 ```py
 def sort(arr:List[int]) -> Generator[List[int]]:
-    n:int=len(arr)
-    fine:bool = False
+    n = len(arr)
+    fine = False
     while not fine:
         fine = True
         for i in range(n-1): 
