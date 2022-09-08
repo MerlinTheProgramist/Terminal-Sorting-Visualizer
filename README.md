@@ -4,7 +4,7 @@ It uses curses, that is build in to python3, so you dont need to install anythin
 
 ![caption](https://i.imgur.com/gbmtdZk.gif)
 ## Run defaults by 
-```python3 ./graph_drawer.py```
+`python3 ./graph_drawer.py`
 
 ## Test your favorite Sorting Algorithms!
 Create new python script inside `/Algorithms` folder.  
